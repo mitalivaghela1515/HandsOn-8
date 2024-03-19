@@ -1,0 +1,182 @@
+Q.2 => Implement and upload your source code to github for: stack, queue, and singly linked list. Make sure to implement the same functionality (api/interface) as the ones from the book.  *Restriction*: Use fixed sized arrays (C style arrays) and assume only integers (C style int) for the data to store.
+
+Below are implementations of a stack, a queue, and a singly linked list using fixed-sized arrays (C-style arrays) and restricted to storing integers:
+
+1.	Stack :
+
+     #define MAX_SIZE 100
+
+class Stack {
+private:
+    int data[MAX_SIZE];
+    int top;
+
+public:
+    Stack() {
+        top = -1;
+    }
+
+    bool isEmpty() {
+        return top == -1;
+    }
+
+    bool isFull() {
+        return top == MAX_SIZE - 1;
+    }
+
+    void push(int value) {
+        if (isFull()) {
+            cout << "Stack overflow!" << endl;
+            return;
+        }
+        data[++top] = value;
+    }
+
+    int pop() {
+        if (isEmpty()) {
+            cout << "Stack underflow!" << endl;
+            return INT_MIN;
+        }
+        return data[top--];
+    }
+
+    int peek() {
+        if (isEmpty()) {
+            cout << "Stack is empty!" << endl;
+            return INT_MIN;
+        }
+        return data[top];
+    }
+};
+
+
+
+2.	Queue:
+
+#define MAX_SIZE 100
+
+class Queue {
+private:
+    int data[MAX_SIZE];
+    int front, rear;
+
+public:
+    Queue() {
+        front = rear = -1;
+    }
+
+    bool isEmpty() {
+        return front == -1;
+    }
+
+    bool isFull() {
+        return (rear + 1) % MAX_SIZE == front;
+    }
+
+    void enqueue(int value) {
+        if (isFull()) {
+            cout << "Queue overflow!" << endl;
+            return;
+        }
+        if (isEmpty()) {
+            front = rear = 0;
+        } else {
+            rear = (rear + 1) % MAX_SIZE;
+        }
+        data[rear] = value;
+    }
+
+    int dequeue() {
+        if (isEmpty()) {
+            cout << "Queue underflow!" << endl;
+            return INT_MIN;
+        }
+        int value = data[front];
+        if (front == rear) {
+            front = rear = -1;
+        } else {
+            front = (front + 1) % MAX_SIZE;
+        }
+        return value;
+    }
+
+    int peek() {
+        if (isEmpty()) {
+            cout << "Queue is empty!" << endl;
+            return INT_MIN;
+        }
+        return data[front];
+    }
+};
+
+
+3.	Singly Linked list:
+
+class Node {
+public:
+    int data;
+    Node* next;
+
+    Node(int value) {
+        data = value;
+        next = nullptr;
+    }
+};
+
+class LinkedList {
+private:
+    Node* head;
+
+public:
+    LinkedList() {
+        head = nullptr;
+    }
+
+    void insert(int value) {
+        Node* newNode = new Node(value);
+        if (head == nullptr) {
+            head = newNode;
+        } else {
+            Node* temp = head;
+            while (temp->next != nullptr) {
+                temp = temp->next;
+            }
+            temp->next = newNode;
+        }
+    }
+
+    void remove(int value) {
+        if (head == nullptr) {
+            cout << "List is empty!" << endl;
+            return;
+        }
+        if (head->data == value) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+            return;
+        }
+        Node* prev = nullptr;
+        Node* current = head;
+        while (current != nullptr && current->data != value) {
+            prev = current;
+            current = current->next;
+        }
+        if (current == nullptr) {
+            cout << "Element not found!" << endl;
+        } else {
+            prev->next = current->next;
+            delete current;
+        }
+    }
+
+    void display() {
+        Node* temp = head;
+        while (temp != nullptr) {
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
+        cout << endl;
+    }
+};
+
